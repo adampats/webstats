@@ -34,6 +34,7 @@ begin
   # read file line by line
   data = []
   IO.foreach( opt[:file] ) { |line|
+    line = line.force_encoding('UTF-8')
     a = line.split( /\s|\[|"/ ) # TODO: more explicit regex
     if a[7].include?( opt[:method].to_s.upcase ) || opt[:method].nil?
       data.push( { ip: a[0], date: a[4], method: a[7], resp: a[11] } )
@@ -47,7 +48,7 @@ begin
 
   results = count.sort_by { |k,v| v }.reverse[0..(opt[:top].to_i - 1)]
   results.each do |r|
-    puts "#{r[0]} \t #{r[1]}"
+    printf "%-40s %s\n", r[0], r[1]
   end
 
 rescue Exception => e
